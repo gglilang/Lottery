@@ -15,6 +15,14 @@ import java.io.StringWriter;
  */
 public class Message {
 
+    public Header getHeader() {
+        return header;
+    }
+
+    public Body getBody() {
+        return body;
+    }
+
     private Header header = new Header();
     private Body body = new Body();
 

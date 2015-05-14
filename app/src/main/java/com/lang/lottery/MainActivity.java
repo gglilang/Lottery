@@ -3,6 +3,8 @@ package com.lang.lottery;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.lang.lottery.net.NetUtil;
+
 
 public class MainActivity extends Activity {
 
@@ -11,7 +13,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        NetUtil.checkNet(this);
     }
 
 }

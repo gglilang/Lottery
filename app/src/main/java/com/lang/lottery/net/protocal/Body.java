@@ -19,6 +19,26 @@ import java.util.List;
 public class Body {
     private List<Element> elements = new ArrayList<>();
 
+
+    /*******************处理服务器回复*****************************/
+    private String serviceBodyInsideDESINFO;    //处理服务器端回复的body中的DES加密信息
+    private Oelement oelement = new Oelement();
+
+    public Oelement getOelement() {
+        return oelement;
+    }
+
+    public String getServiceBodyInsideDESINFO() {
+        return serviceBodyInsideDESINFO;
+    }
+
+    public void setServiceBodyInsideDESINFO(String serviceBodyInsideDESINFO) {
+        this.serviceBodyInsideDESINFO = serviceBodyInsideDESINFO;
+    }
+
+    /*******************处理服务器回复*****************************/
+
+
     public List<Element> getElements() {
         return elements;
     }
