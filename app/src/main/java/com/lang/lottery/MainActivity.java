@@ -8,12 +8,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.lang.lottery.util.FadeUtil;
+import com.lang.lottery.util.PromptManager;
 import com.lang.lottery.view.FirstUI;
+import com.lang.lottery.view.Hall;
 import com.lang.lottery.view.SecondUI;
-import com.lang.lottery.view.manager.BaseUI;
+import com.lang.lottery.view.BaseUI;
 import com.lang.lottery.view.manager.BottomManager;
 import com.lang.lottery.view.manager.MiddleManager;
 import com.lang.lottery.view.manager.TitleManager;
@@ -42,14 +43,20 @@ public class MainActivity extends Activity {
         manager.init(this);
         manager.showUnLoginTitle();
 
-        BottomManager.getInstrance().init(this);
-        BottomManager.getInstrance().changeBottomVisibility(View.VISIBLE);
+        BottomManager.getInstance().init(this);
+        BottomManager.getInstance().changeBottomVisibility(View.VISIBLE);
         middle = (RelativeLayout) findViewById(R.id.ll_middle);
 
         MiddleManager.getInstance().setMiddle(middle);
 
+
+        //建立观察者和被观察者之间的关系（标题和底部导航添加到观察者的容器里面）
+        MiddleManager.getInstance().addObserver(TitleManager.getInstance());
+        MiddleManager.getInstance().addObserver(BottomManager.getInstance());
+
         //loadFirstUI();
-        MiddleManager.getInstance().changeUI(FirstUI.class);
+//        MiddleManager.getInstance().changeUI(FirstUI.class);
+        MiddleManager.getInstance().changeUI(Hall.class);
 
         //handler.sendEmptyMessageDelayed(10, 2000);
     }
@@ -99,7 +106,7 @@ public class MainActivity extends Activity {
             case KeyEvent.KEYCODE_BACK:
                 boolean result = MiddleManager.getInstance().goBack();
                 if(!result){
-                    Toast.makeText(MainActivity.this, "是否退出程序", Toast.LENGTH_SHORT).show();
+                    PromptManager.showExitSystem(this);
                 }
                 return false;
         }

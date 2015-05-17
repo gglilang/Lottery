@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lang.lottery.ConstantValue;
-import com.lang.lottery.view.manager.BaseUI;
 
 /**
  * Created by Lang on 2015/5/15.
@@ -21,6 +20,11 @@ public class SecondUI extends BaseUI{
         init();
     }
 
+    @Override
+    protected void setListener() {
+
+    }
+
     public View getChild(){
         return textView;
     }
@@ -28,7 +32,7 @@ public class SecondUI extends BaseUI{
     /**
      * 初始化：调用一次
      */
-    private void init() {
+    public void init() {
         textView = new TextView(context);
         ViewGroup.LayoutParams layoutParams = textView.getLayoutParams();
         layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);

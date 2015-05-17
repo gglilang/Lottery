@@ -6,26 +6,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.lang.lottery.ConstantValue;
 import com.lang.lottery.R;
 import com.lang.lottery.view.SecondUI;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * 管理标题容器的工具
  * Created by Lang on 2015/5/15.
  */
-public class TitleManager implements Observer {
+public class TitleManager1 {
 
     //显示和隐藏
 
-    private static TitleManager instance = new TitleManager();
+    private static TitleManager1 instance = new TitleManager1();
 
-    public static TitleManager getInstance() {
+    public static TitleManager1 getInstance() {
         return instance;
     }
 
@@ -113,22 +107,5 @@ public class TitleManager implements Observer {
 
     public void changeTitle(String title){
         titleContent.setText(title);
-    }
-
-    @Override
-    public void update(Observable observable, Object data) {
-        if (data != null && StringUtils.isNumeric(data.toString())) {
-            int id = Integer.parseInt(data.toString());
-            switch (id) {
-                case ConstantValue.VIEW_FIRST:
-                case ConstantValue.VIEW_HALL:
-                    showUnLoginTitle();
-                    break;
-                case ConstantValue.VIEW_SECOND:
-                    showLoginTitle();
-                    break;
-
-            }
-        }
     }
 }

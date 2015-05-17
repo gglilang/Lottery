@@ -8,42 +8,32 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.lang.lottery.ConstantValue;
 import com.lang.lottery.R;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Observable;
-import java.util.Observer;
 
 
 /**
  * Created by Lang on 2015/5/15.
  */
-public class BottomManager implements Observer {
+public class BottomManager1 {
 
     private static final String TAG = "BottomManager";
-    /**
-     * ***************第一步：管理对象的创建（单例模式）****************
-     */
+    /******************第一步：管理对象的创建（单例模式）*****************/
     //创建一个静态实例
-    private static BottomManager instance;
+    private static BottomManager1 instrance;
 
     //构造私有
-    public BottomManager() {
+    public BottomManager1() {
     }
 
     //提供统一的对外获取实例的入口
-    public static BottomManager getInstance() {
-        if (instance == null) {
-            instance = new BottomManager();
+    public static BottomManager1 getInstrance() {
+        if(instrance == null){
+            instrance = new BottomManager1();
         }
-        return instance;
+        return instrance;
     }
 
-    /**
-     * *************第二步：初始化各个导航容器及相关控件设置监听***************
-     */
+    /****************第二步：初始化各个导航容器及相关控件设置监听****************/
 
     //底部菜单容器
     private RelativeLayout bottomMenuContainer;
@@ -52,9 +42,7 @@ public class BottomManager implements Observer {
     private LinearLayout commonBottom;  //购彩通用导航
     private LinearLayout playBottom;    //购彩
 
-    /**
-     * ************导航按钮************
-     */
+    /***************导航按钮*************/
 
     //购彩导航底部按钮及提示信息
     private ImageButton cleanButton;
@@ -62,15 +50,13 @@ public class BottomManager implements Observer {
 
     private TextView playBottomNotice;
 
-    /**
-     * **************通用导航底部按钮****************
-     */
+    /*****************通用导航底部按钮*****************/
     private ImageButton homeButton;
     private ImageButton hallButton;
     private ImageButton rechargeButton;
     private ImageButton myselfButton;
 
-    public void init(Activity activity) {
+    public void init(Activity activity){
         bottomMenuContainer = (RelativeLayout) activity.findViewById(R.id.ll_bottom);
         commonBottom = (LinearLayout) activity.findViewById(R.id.ll_bottom_common);
         playBottom = (LinearLayout) activity.findViewById(R.id.ll_bottom_game);
@@ -111,8 +97,8 @@ public class BottomManager implements Observer {
     /**
      * 转换到通用导航
      */
-    public void showCommonBottom() {
-        if (bottomMenuContainer.getVisibility() == View.GONE || bottomMenuContainer.getVisibility() == View.INVISIBLE) {
+    public void showCommonBottom(){
+        if(bottomMenuContainer.getVisibility() == View.GONE || bottomMenuContainer.getVisibility() == View.INVISIBLE){
             bottomMenuContainer.setVisibility(View.VISIBLE);
         }
         commonBottom.setVisibility(View.VISIBLE);
@@ -122,8 +108,8 @@ public class BottomManager implements Observer {
     /**
      * 转换到购彩
      */
-    public void showGameBottom() {
-        if (bottomMenuContainer.getVisibility() == View.GONE || bottomMenuContainer.getVisibility() == View.INVISIBLE) {
+    public void showGameBottom(){
+        if(bottomMenuContainer.getVisibility() == View.GONE || bottomMenuContainer.getVisibility() == View.INVISIBLE){
             bottomMenuContainer.setVisibility(View.VISIBLE);
         }
         commonBottom.setVisibility(View.INVISIBLE);
@@ -132,39 +118,19 @@ public class BottomManager implements Observer {
 
     /**
      * 改变底部导航容器显示情况
-     *
      * @param type
      */
-    public void changeBottomVisibility(int type) {
-        if (bottomMenuContainer.getVisibility() != type) {
+    public void changeBottomVisibility(int type){
+        if(bottomMenuContainer.getVisibility() != type){
             bottomMenuContainer.setVisibility(type);
         }
     }
 
-    /**
-     * ********************第四步：控制玩法导航内容显示*****************
-     */
+    /***********************第四步：控制玩法导航内容显示******************/
 
-    public void changeGameBottomNotice(String notice) {
+    public void changeGameBottomNotice(String notice){
         playBottomNotice.setText(notice);
     }
 
 
-    @Override
-    public void update(Observable observable, Object data) {
-
-        if (data != null && StringUtils.isNumeric(data.toString())) {
-            int id = Integer.parseInt(data.toString());
-            switch (id) {
-                case ConstantValue.VIEW_FIRST:
-                case ConstantValue.VIEW_HALL:
-                    showCommonBottom();
-                    break;
-                case ConstantValue.VIEW_SECOND:
-                    showGameBottom();
-                    break;
-
-            }
-        }
-    }
 }

@@ -43,4 +43,21 @@ public interface ConstantValue {
 
     int VIEW_FIRST = 1;
     int VIEW_SECOND = 2;
+
+    /**
+     * 购彩大厅
+     */
+    int VIEW_HALL = 10;
+    /**
+     * 双色球选号界面
+     */
+    int VIEW_SSQ = 15;
+    /**
+     * 购物车
+     */
+    int VIEW_SHOPPING = 20;
+    /**
+     * 追期和倍投的设置界面
+     */
+    int VIEW_PREBET = 25;
 }

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
+import com.lang.lottery.ConstantValue;
 import com.lang.lottery.R;
 import com.lang.lottery.view.BaseUI;
 
@@ -13,17 +14,16 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Observable;
 
 /**
  * Created by Lang on 2015/5/15.
  */
-public class MiddleManager extends Observable {
+public class MiddleManager1{
 
     private static final String TAG = "MiddleManager";
-    private static MiddleManager instance = new MiddleManager();
+    private static MiddleManager1 instance = new MiddleManager1();
 
-    public static MiddleManager getInstance() {
+    public static MiddleManager1 getInstance() {
         return instance;
     }
 
@@ -45,13 +45,12 @@ public class MiddleManager extends Observable {
 
     /**
      * 切换界面：解决问题“三个容器的联动”
-     *
-     * @param targetClazz 目标对象的字节码
+     * @param targetClazz   目标对象的字节码
      */
-    public void changeUI(Class<? extends BaseUI> targetClazz) {
+    public void changeUI(Class<? extends BaseUI> targetClazz){
 
         //判断：当前正在展示的界面和切换目标界面是否相同
-        if (currentUI != null && currentUI.getClass() == targetClazz) {
+        if(currentUI != null && currentUI.getClass() == targetClazz){
             return;
         }
 
@@ -59,7 +58,7 @@ public class MiddleManager extends Observable {
         //一旦建过，重用
         //判断是否创建了--曾经创建过的界面需要存储
         String key = targetClazz.getSimpleName();
-        if (VIEWCACHE.containsKey(key)) {
+        if(VIEWCACHE.containsKey(key)) {
             //创建了，重用
             targetUI = VIEWCACHE.get(key);
         } else {
@@ -104,41 +103,27 @@ public class MiddleManager extends Observable {
 //            BottomManager.getInstance().showGameBottom();
 //        }
 
-//        //方案二：更换对比依据
-//        switch (currentUI.getID()){
-//            case ConstantValue.VIEW_FIRST:
-//                TitleManager.getInstance().showUnLoginTitle();
-//            BottomManager.getInstance().showCommonBottom();
-//                break;
-//            case ConstantValue.VIEW_SECOND:
-//                TitleManager.getInstance().showLoginTitle();
-//                BottomManager.getInstance().showGameBottom();
-//                break;
-//        }
-
-        // 降低三个容器的耦合度
-        // 当中间容器变动的时候，中间容器“通知”其他的容器，你们该变动了，位移的标示传递，其他容器依据唯一标示进行容器内容的切换
-        // 通知：
-        // 广播：多个应用
-        // 为中间容器的变动增加了监听--观察者设计模式
-
-        // 1、将中间容器变成被观察者的对象
-        // 2、标题和底部导航变成观察者
-        // 3、建立观察者和被观察者之间的关系（标题和底部导航添加到观察者的容器里面）
-        // 4、一旦中间容器变动，修改boolean，然后通知所有的观察者.update();
-        setChanged();
-        notifyObservers(currentUI.getID());
+        //方案二：更换对比依据
+        switch (currentUI.getID()){
+            case ConstantValue.VIEW_FIRST:
+                TitleManager.getInstance().showUnLoginTitle();
+            BottomManager.getInstance().showCommonBottom();
+                break;
+            case ConstantValue.VIEW_SECOND:
+                TitleManager.getInstance().showLoginTitle();
+                BottomManager.getInstance().showGameBottom();
+                break;
+        }
     }
 
     /**
      * 切换界面：解决问题“中间容器中，每次切换没有判断当前正在展示和需要切换的目标是不是同一个”
-     *
-     * @param targetClazz 目标对象的字节码
+     * @param targetClazz   目标对象的字节码
      */
-    public void changeUI3(Class<? extends BaseUI> targetClazz) {
+    public void changeUI3(Class<? extends BaseUI> targetClazz){
 
         //判断：当前正在展示的界面和切换目标界面是否相同
-        if (currentUI != null && currentUI.getClass() == targetClazz) {
+        if(currentUI != null && currentUI.getClass() == targetClazz){
             return;
         }
 
@@ -146,7 +131,7 @@ public class MiddleManager extends Observable {
         //一旦建过，重用
         //判断是否创建了--曾经创建过的界面需要存储
         String key = targetClazz.getSimpleName();
-        if (VIEWCACHE.containsKey(key)) {
+        if(VIEWCACHE.containsKey(key)) {
             //创建了，重用
             targetUI = VIEWCACHE.get(key);
         } else {
@@ -173,15 +158,14 @@ public class MiddleManager extends Observable {
 
     /**
      * 切换界面：解决问题“在标题容器中每次点击都创建一个目标界面”
-     *
-     * @param targetClazz 目标对象的字节码
+     * @param targetClazz   目标对象的字节码
      */
-    public void changeUI2(Class<? extends BaseUI> targetClazz) {
+    public void changeUI2(Class<? extends BaseUI> targetClazz){
         BaseUI targetUI = null;
         //一旦建过，重用
         //判断是否创建了--曾经创建过的界面需要存储
         String key = targetClazz.getSimpleName();
-        if (VIEWCACHE.containsKey(key)) {
+        if(VIEWCACHE.containsKey(key)) {
             //创建了，重用
             targetUI = VIEWCACHE.get(key);
         } else {
@@ -204,17 +188,16 @@ public class MiddleManager extends Observable {
 
     /**
      * 切换界面
-     *
      * @param ui
      */
-    public void changeUI1(BaseUI ui) {
+    public void changeUI1(BaseUI ui){
         middle.removeAllViews();
         View child = ui.getChild();
         middle.addView(child);
         child.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.la_view_change));
     }
 
-    public Context getContext() {
+    public Context getContext(){
         return middle.getContext();
     }
 
@@ -225,7 +208,7 @@ public class MiddleManager extends Observable {
         // 删除了栈顶
         // 有序集合
 
-        if (HISTORY.size() > 1) {
+        if(HISTORY.size() > 1){
             HISTORY.removeFirst();
             String key = HISTORY.getFirst();
             BaseUI currentTarget = VIEWCACHE.get(key);
