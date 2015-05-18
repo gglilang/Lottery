@@ -1,11 +1,15 @@
 package com.lang.lottery.view;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lang.lottery.R;
+import com.lang.lottery.net.NetUtil;
+import com.lang.lottery.net.protocal.Message;
+import com.lang.lottery.util.PromptManager;
 
 /**
  * 所有界面的基类
@@ -65,5 +69,29 @@ public abstract class BaseUI implements View.OnClickListener {
     public void onClick(View v) {
 
         Log.i("test", "test");
+    }
+
+    /**
+     * 访问网络的工具
+     * @param <Params>
+     */
+    protected abstract class MyHttpTask<Params> extends AsyncTask<Params, Void, Message> {
+
+
+        /**
+         * 类似与Thread.start方法
+         * 由于final修饰，无法Override
+         * 省略掉网络判断
+         * @param params
+         * @return
+         */
+        public final AsyncTask<Params, Void, Message> executeProxy(Params... params) {
+            if(NetUtil.checkNet(context)) {
+                return super.execute(params);
+            } else{
+                PromptManager.showNoNetWork(context);
+            }
+            return null;
+        }
     }
 }

@@ -1,9 +1,11 @@
-package com.lang.lottery.engine;
+package com.lang.lottery.engine.impl;
 
 import android.util.Xml;
 
 import com.lang.lottery.ConstantValue;
 import com.lang.lottery.bean.User;
+import com.lang.lottery.engine.BaseEngine;
+import com.lang.lottery.engine.UserEngine;
 import com.lang.lottery.net.HttpClientUtil;
 import com.lang.lottery.net.protocal.Message;
 import com.lang.lottery.net.protocal.element.UserLoginElement;
@@ -19,7 +21,7 @@ import java.io.StringReader;
 /**
  * Created by Lang on 2015/5/13.
  */
-public class UserEngineImpl extends BaseEngine implements UserEngine{
+public class UserEngineImpl extends BaseEngine implements UserEngine {
 
 
     public Message login(User user){
@@ -43,7 +45,7 @@ public class UserEngineImpl extends BaseEngine implements UserEngine{
         try {
             //body明文（解析+解密DES）
             DES des = new DES();
-            String body = "<body>" + des.authcode(result.getBody().getServiceBodyInsideDESINFO(), "ENCODE", ConstantValue.DES_PASSWORD) + "</body>";
+            String body = "<body>" + des.authcode(result.getBody().getServiceBodyInsideDESInfo(), "ENCODE", ConstantValue.DES_PASSWORD) + "</body>";
 
             parser.setInput(new StringReader(body));
             int eventType = parser.getEventType();
@@ -117,7 +119,7 @@ public class UserEngineImpl extends BaseEngine implements UserEngine{
                                 result.getHeader().getDigest().setTagValue(parser.nextText());
                             }
                             if("body".equals(name)){
-                                result.getBody().setServiceBodyInsideDESINFO(parser.nextText());
+                                result.getBody().setServiceBodyInsideDESInfo(parser.nextText());
                             }
                             break;
                     }
@@ -129,7 +131,7 @@ public class UserEngineImpl extends BaseEngine implements UserEngine{
             //原始数据还原：时间戳（解析）+密码（常量）+body明文（解析DES)
             //body明文（解析+解密DES）
             DES des = new DES();
-            String body = "<body>" + des.authcode(result.getBody().getServiceBodyInsideDESINFO(), "ENCODE", ConstantValue.DES_PASSWORD) + "</body>";
+            String body = "<body>" + des.authcode(result.getBody().getServiceBodyInsideDESInfo(), "ENCODE", ConstantValue.DES_PASSWORD) + "</body>";
             String orgInfo = result.getHeader().getTimestamp().getTagValue()
                     + ConstantValue.AGENTER_PASSWORD
                     + body;

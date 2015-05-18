@@ -10,7 +10,7 @@ public interface ConstantValue {
     /**
      * 子代理商的密钥
      */
-    String AGENTER_PASSWORD = "5353535353";
+    String AGENTER_PASSWORD = "9ab62a694d8bf6ced1fab6acd48d02f8";
 
     /**
      * <agenterid>889931</agenterid>
@@ -60,4 +60,11 @@ public interface ConstantValue {
      * 追期和倍投的设置界面
      */
     int VIEW_PREBET = 25;
+
+    int SSQ = 118;
+
+    /**
+     * 服务器返回成功状态码
+     */
+    String SUCCESS = "0";
 }

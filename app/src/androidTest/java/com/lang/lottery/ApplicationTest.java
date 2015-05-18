@@ -8,9 +8,7 @@ import android.util.Log;
 
 import com.lang.lottery.bean.User;
 import com.lang.lottery.engine.UserEngine;
-import com.lang.lottery.engine.UserEngineImpl;
 import com.lang.lottery.net.NetUtil;
-import com.lang.lottery.net.protocal.Element;
 import com.lang.lottery.net.protocal.Message;
 import com.lang.lottery.net.protocal.element.CurrentIssueElement;
 import com.lang.lottery.util.BeanFactory;
@@ -58,8 +56,18 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         user = new User();
         user.setUsername("1320000000");
         user.setPassword("000000");
-        Message login = userEngine.login(user);
+        Message login = null;
+        if (userEngine != null) {
+            login = userEngine.login(user);
+        }
+        else{
+            System.out.println("login");
+        }
 
-        Log.i(TAG, login.getBody().getOelement().getErrormsg());
+        if (login != null) {
+            Log.i(TAG, login.getBody().getOelement().getErrormsg());
+        }else {
+            System.out.println("tag");
+        }
     }
 }
