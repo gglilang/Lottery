@@ -40,7 +40,7 @@ public class TitleManager implements Observer {
     private TextView titleContent;  //标题内容
     private TextView userInfo;      //用户信息
 
-    public void init(Activity activity){
+    public void init(Activity activity) {
         commonContainer = (RelativeLayout) activity.findViewById(R.id.ll_common_container);
         loginContainer = (RelativeLayout) activity.findViewById(R.id.ll_login_container);
         unLoginContainer = (RelativeLayout) activity.findViewById(R.id.ll_unlogin_container);
@@ -80,7 +80,7 @@ public class TitleManager implements Observer {
         });
     }
 
-    private void initTitle(){
+    private void initTitle() {
         commonContainer.setVisibility(View.GONE);
         loginContainer.setVisibility(View.GONE);
         unLoginContainer.setVisibility(View.GONE);
@@ -89,7 +89,7 @@ public class TitleManager implements Observer {
     /**
      * 显示通用标题
      */
-    public void showCommonTitle(){
+    public void showCommonTitle() {
 
         initTitle();
         commonContainer.setVisibility(View.VISIBLE);
@@ -98,7 +98,7 @@ public class TitleManager implements Observer {
     /**
      * 显示未登录的标题
      */
-    public void showUnLoginTitle(){
+    public void showUnLoginTitle() {
         initTitle();
         unLoginContainer.setVisibility(View.VISIBLE);
     }
@@ -106,12 +106,12 @@ public class TitleManager implements Observer {
     /**
      * 显示登陆的标题
      */
-    public void showLoginTitle(){
+    public void showLoginTitle() {
         initTitle();
         loginContainer.setVisibility(View.VISIBLE);
     }
 
-    public void changeTitle(String title){
+    public void changeTitle(String title) {
         titleContent.setText(title);
     }
 
@@ -125,7 +125,8 @@ public class TitleManager implements Observer {
                     showUnLoginTitle();
                     break;
                 case ConstantValue.VIEW_SECOND:
-                    showLoginTitle();
+                case ConstantValue.VIEW_SSQ:
+                    showCommonTitle();
                     break;
 
             }

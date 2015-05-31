@@ -13,4 +13,9 @@ public class GlobalParams {
      *代理的端口
      */
     public static int PORT=0;
+
+    /**
+     * 屏幕宽度（像素）
+     */
+    public static int WIN_WIDTH = 0;
 }

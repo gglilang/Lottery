@@ -28,4 +28,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile files('libs/commons-codec.jar')
     compile files('libs/commons-lang3-3.0-beta.jar')
+    compile 'com.android.support:support-v4:22.1.1'
 }

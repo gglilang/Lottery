@@ -1,6 +1,7 @@
 package com.lang.lottery.view.manager;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -43,12 +44,19 @@ public class MiddleManager extends Observable {
      */
     private LinkedList<String> HISTORY = new LinkedList<>();
 
+
+    //构造函数
+    public void changeUI(Class<? extends BaseUI> targetClazz) {
+        changeUI(targetClazz, null);
+    }
+
     /**
      * 切换界面：解决问题“三个容器的联动”
      *
      * @param targetClazz 目标对象的字节码
+     * @param bundle
      */
-    public void changeUI(Class<? extends BaseUI> targetClazz) {
+    public void changeUI(Class<? extends BaseUI> targetClazz, Bundle bundle) {
 
         //判断：当前正在展示的界面和切换目标界面是否相同
         if (currentUI != null && currentUI.getClass() == targetClazz) {
@@ -72,12 +80,24 @@ public class MiddleManager extends Observable {
                 throw new RuntimeException("constructor new instance error");
             }
         }
+
+        if(targetUI != null && bundle != null){
+            targetUI.setBundle(bundle);
+        }
+
         Log.i(TAG, targetUI.toString());
+
+        // 在清理当前正在展示的界面之前--onPause方法
+        if(currentUI != null)
+        currentUI.onPause();
 
         middle.removeAllViews();
         View child = targetUI.getChild();
         middle.addView(child);
         child.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.la_view_change));
+
+        // 在加载完界面之后-onResume
+        targetUI.onResume();
         currentUI = targetUI;
 
         //将当前显示的界面放到栈顶

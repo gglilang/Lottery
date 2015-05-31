@@ -2,6 +2,7 @@ package com.lang.lottery.view;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import com.lang.lottery.util.PromptManager;
 public abstract class BaseUI implements View.OnClickListener {
     protected Context context;
 
+    protected Bundle bundle;
+
     protected ViewGroup showInMiddle;
 
     public BaseUI(Context context) {
@@ -25,6 +28,14 @@ public abstract class BaseUI implements View.OnClickListener {
         init();
 
         setListener();
+    }
+
+    public Bundle getBundle() {
+        return bundle;
+    }
+
+    public void setBundle(Bundle bundle) {
+        this.bundle = bundle;
     }
 
     /**
@@ -69,6 +80,19 @@ public abstract class BaseUI implements View.OnClickListener {
     public void onClick(View v) {
 
         Log.i("test", "test");
+    }
+
+    /**
+     * 要出去的时候调用
+     */
+    public void onPause() {
+    }
+
+    /**
+     * 进入到界面之后
+     */
+    public void onResume() {
+
     }
 
     /**
