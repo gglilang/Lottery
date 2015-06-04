@@ -4,6 +4,8 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -13,12 +15,24 @@ import android.widget.GridView;
 
 import com.lang.lottery.ConstantValue;
 import com.lang.lottery.R;
+import com.lang.lottery.bean.ShoppingCart;
+import com.lang.lottery.bean.Ticket;
+import com.lang.lottery.engine.CommonInfoEngine;
+import com.lang.lottery.net.protocal.Element;
+import com.lang.lottery.net.protocal.Message;
+import com.lang.lottery.net.protocal.Oelement;
+import com.lang.lottery.net.protocal.element.CurrentIssueElement;
+import com.lang.lottery.util.BeanFactory;
+import com.lang.lottery.util.PromptManager;
 import com.lang.lottery.view.adapter.PoolAdapter;
 import com.lang.lottery.view.custom.MyGridView;
 import com.lang.lottery.view.manager.BottomManager;
+import com.lang.lottery.view.manager.MiddleManager;
+import com.lang.lottery.view.manager.PlayGame;
 import com.lang.lottery.view.manager.TitleManager;
 import com.lang.lottery.view.sensor.ShakeListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,7 +41,7 @@ import java.util.Random;
  * 双色球选号界面
  * Created by Lang on 2015/5/19.
  */
-public class PlaySSQ extends BaseUI {
+public class PlaySSQ extends BaseUI implements PlayGame{
 
     // 标题
     // 判断购彩大厅是否获取到期次信息
@@ -190,6 +204,7 @@ public class PlaySSQ extends BaseUI {
     public void onResume() {
         changeTitle();
         changeNotice();
+        clear();
 
         // 注册
         listener = new ShakeListener(context) {
@@ -301,5 +316,113 @@ public class PlaySSQ extends BaseUI {
         } else {
             throw new IllegalArgumentException("num >= 0");
         }
+    }
+
+    /**
+     * 清除
+     */
+    public void clear(){
+        redNums.clear();
+        blueNums.clear();
+        changeNotice();
+
+        redAdapter.notifyDataSetChanged();
+        blueAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void done() {
+
+        // ①判断：用户是否选择了一注投注
+        if(redNums.size() >= 6 && blueNums.size() >= 1) {
+            // 一个购物车中，只能放置一个彩种，当前期的投注信息
+            // ②判断：是否获取到了当前销售期的信息
+            if(bundle != null) {
+                // ③封装用户的投注信息：红球、篮球、注数
+
+                Ticket ticket = new Ticket();
+                DecimalFormat decimalFormat = new DecimalFormat("00");
+                StringBuffer redBuffer = new StringBuffer();
+                for(Integer item : redNums){
+                    redBuffer.append(" ").append(decimalFormat.format(item));
+                }
+                ticket.setRedNum(redBuffer.substring(1));
+
+                StringBuffer blueBuffer = new StringBuffer();
+                for(Integer item : blueNums){
+                    blueBuffer.append(" ").append(decimalFormat.format(item));
+                }
+
+                ticket.setBlueNum(blueBuffer.substring(1));
+
+                ticket.setNum(calCathectic());
+
+                // ④创建彩票购物车，将投注信息添加到购物车中
+                ShoppingCart.getInstance().getTickets().add(ticket);
+                // ⑤设置彩种的标示，设置彩种期次
+                ShoppingCart.getInstance().setIssue(bundle.getString("issue"));
+                ShoppingCart.getInstance().setLotteryid(ConstantValue.SSQ);
+
+                // ⑥界面跳转--购物车展示
+                MiddleManager.getInstance().changeUI(Shopping.class, bundle);
+            } else {
+                // 重新获取期次信息
+                getCurrentIssueInfo();
+            }
+        } else {
+            // 提示：需要选择一注
+            PromptManager.showToast(context, "需要选择一注");
+        }
+
+        // 分支
+
+    }
+
+    private void getCurrentIssueInfo() {
+
+        new MyHttpTask<Integer>() {
+
+            @Override
+            protected void onPreExecute() {
+                // 显示滚动条
+                PromptManager.showProgressDialog(context);
+            }
+
+            @Override
+            protected Message doInBackground(Integer... params) {
+                //获得数据--业务的调用
+                CommonInfoEngine engine = BeanFactory.getImpl(CommonInfoEngine.class);
+
+
+                assert engine != null;
+                return engine.getCurrentIssueInfo(params[0]);
+
+            }
+
+            @Override
+            protected void onPostExecute(Message message) {
+
+                PromptManager.closeProgressDialog();
+                //更新界面
+                if (message != null) {
+                    Oelement oelement = message.getBody().getOelement();
+                    if (ConstantValue.SUCCESS.equals(oelement.getErrorcode())) {
+                        CurrentIssueElement element = (CurrentIssueElement) message.getBody().getElements().get(0);
+                        // 创建bundle
+                        bundle = new Bundle();
+                        bundle.putString("issue", element.getIssue());
+
+                        changeTitle();
+                    } else {
+                        PromptManager.showToast(context, oelement.getErrormsg());
+                    }
+                } else {
+                    //可能：网络不通、权限、服务器出错、非法数据
+                    //如何提示用户
+                    PromptManager.showToast(context, "服务器繁忙，请稍后再试。。。");
+                }
+                super.onPostExecute(message);
+            }
+        }.executeProxy(ConstantValue.SSQ);
     }
 }

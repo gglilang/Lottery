@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.lang.lottery.ConstantValue;
 import com.lang.lottery.R;
+import com.lang.lottery.view.BaseUI;
+import com.lang.lottery.view.PlaySSQ;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -92,6 +94,15 @@ public class BottomManager implements Observer {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "点击清空按钮");
+                // 获取当前正在正在展示的界面
+                BaseUI current = MiddleManager.getInstance().getCurrentUI();
+//                if(current instanceof PlaySSQ){
+//                    ((PlaySSQ)current).clear();
+//                }
+
+                if(current instanceof PlayGame){
+                    ((PlayGame)current).clear();
+                }
             }
         });
 
@@ -101,6 +112,12 @@ public class BottomManager implements Observer {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "点击选好按钮");
+                BaseUI current = MiddleManager.getInstance().getCurrentUI();
+
+                if(current instanceof PlayGame){
+                    ((PlayGame)current).done();
+                }
+
             }
         });
     }
@@ -158,13 +175,16 @@ public class BottomManager implements Observer {
             switch (id) {
                 case ConstantValue.VIEW_FIRST:
                 case ConstantValue.VIEW_HALL:
+                case ConstantValue.VIEW_LOGIN:
                     showCommonBottom();
                     break;
                 case ConstantValue.VIEW_SECOND:
                 case ConstantValue.VIEW_SSQ:
                     showGameBottom();
                     break;
-
+                case ConstantValue.VIEW_SHOPPING:
+                    changeBottomVisibility(View.GONE);
+                    break;
             }
         }
     }

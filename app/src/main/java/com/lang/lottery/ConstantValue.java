@@ -61,6 +61,11 @@ public interface ConstantValue {
      */
     int VIEW_PREBET = 25;
 
+    /**
+     * 用户登陆
+     */
+    int VIEW_LOGIN = 30;
+
     int SSQ = 118;
 
     /**

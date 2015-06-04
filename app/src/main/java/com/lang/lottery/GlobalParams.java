@@ -18,4 +18,14 @@ public class GlobalParams {
      * 屏幕宽度（像素）
      */
     public static int WIN_WIDTH = 0;
+
+    /**
+     * 记录用户的登陆状态
+     */
+    public static boolean isLogin = false;
+
+    /**
+     * 用户的余额
+     */
+    public static float MONEY = 0;
 }

@@ -23,6 +23,7 @@ public abstract class BaseUI implements View.OnClickListener {
 
     protected ViewGroup showInMiddle;
 
+
     public BaseUI(Context context) {
         this.context = context;
         init();

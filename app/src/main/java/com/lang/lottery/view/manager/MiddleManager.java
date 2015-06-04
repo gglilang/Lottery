@@ -44,6 +44,9 @@ public class MiddleManager extends Observable {
      */
     private LinkedList<String> HISTORY = new LinkedList<>();
 
+    public BaseUI getCurrentUI() {
+        return currentUI;
+    }
 
     //构造函数
     public void changeUI(Class<? extends BaseUI> targetClazz) {
@@ -249,8 +252,14 @@ public class MiddleManager extends Observable {
             HISTORY.removeFirst();
             String key = HISTORY.getFirst();
             BaseUI currentTarget = VIEWCACHE.get(key);
+
+            currentUI.onPause();
+
             middle.removeAllViews();
             middle.addView(currentTarget.getChild());
+
+            currentTarget.onResume();
+
             currentUI = currentTarget;
             changeTitleAndBottom();
             return true;
