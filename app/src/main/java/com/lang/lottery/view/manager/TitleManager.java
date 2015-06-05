@@ -7,8 +7,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lang.lottery.ConstantValue;
+import com.lang.lottery.GlobalParams;
 import com.lang.lottery.R;
 import com.lang.lottery.view.SecondUI;
+import com.lang.lottery.view.UserLogin;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -75,7 +77,7 @@ public class TitleManager implements Observer {
                 System.out.println("点击登陆键");
                 //MiddleManager.getInstance().changeUI(new SecondUI(MiddleManager.getInstance().getContext()));
                 //changeUI需要修改，不能传递对象，但是明确目标
-                MiddleManager.getInstance().changeUI(SecondUI.class);
+                MiddleManager.getInstance().changeUI(UserLogin.class);
             }
         });
     }
@@ -121,15 +123,23 @@ public class TitleManager implements Observer {
             int id = Integer.parseInt(data.toString());
             switch (id) {
                 case ConstantValue.VIEW_FIRST:
-                case ConstantValue.VIEW_HALL:
                     showUnLoginTitle();
                     break;
                 case ConstantValue.VIEW_SECOND:
                 case ConstantValue.VIEW_SSQ:
                 case ConstantValue.VIEW_SHOPPING:
                 case ConstantValue.VIEW_LOGIN:
+                case ConstantValue.VIEW_PREBET:
                     showCommonTitle();
                     break;
+                case ConstantValue.VIEW_HALL:
+                if(GlobalParams.isLogin){
+                    showLoginTitle();
+                    String info = "用户名：" + GlobalParams.USERNAME + "\n" + "余额：" + GlobalParams.MONEY;
+                    userInfo.setText(info);
+                }else {
+                    showUnLoginTitle();
+                }
 
             }
         }

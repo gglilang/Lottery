@@ -266,4 +266,8 @@ public class MiddleManager extends Observable {
         }
         return false;
     }
+
+    public void clear() {
+        HISTORY.clear();
+    }
 }

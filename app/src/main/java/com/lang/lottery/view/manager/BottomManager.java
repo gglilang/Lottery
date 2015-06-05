@@ -183,6 +183,7 @@ public class BottomManager implements Observer {
                     showGameBottom();
                     break;
                 case ConstantValue.VIEW_SHOPPING:
+                case ConstantValue.VIEW_PREBET:
                     changeBottomVisibility(View.GONE);
                     break;
             }

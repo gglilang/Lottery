@@ -5,6 +5,10 @@ package com.lang.lottery;
  */
 public class GlobalParams {
     /**
+     * 用户名
+     */
+    public static String USERNAME = "";
+    /**
      * 代理的ip
      */
     public static String PROXY="";
@@ -27,5 +31,5 @@ public class GlobalParams {
     /**
      * 用户的余额
      */
-    public static float MONEY = 0;
+    public static Float MONEY = 0f;
 }

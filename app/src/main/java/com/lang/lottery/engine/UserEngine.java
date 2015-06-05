@@ -22,4 +22,6 @@ public interface UserEngine {
      * @return
      */
     Message getBalance(User user);
+
+    Message bet(User user);
 }

@@ -23,7 +23,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/ii_shopping_list_betting_money"
+            android:id="@+id/ll_shopping_list_betting_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -179,7 +179,7 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ll_lotery_shopping_list"
+        android:id="@+id/ll_lottery_shopping_list"
         android:layout_above="@id/ll_lottery_multiple_recovery_period"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"

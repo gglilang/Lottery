@@ -1,5 +1,7 @@
 package com.lang.lottery.bean;
 
+import com.lang.lottery.GlobalParams;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,17 @@ public class ShoppingCart {
     private Integer lotterynumber;  // 计算
     private Integer lotteryvalue;
 
+    private Integer appnumbers = 1;
+    private Integer issuenumbers = 1;
+
+    public Integer getAppnumbers() {
+        return appnumbers;
+    }
+
+    public Integer getIssuenumbers() {
+        return issuenumbers;
+    }
+
     public Integer getLotteryid() {
         return lotteryid;
     }
@@ -65,7 +78,62 @@ public class ShoppingCart {
     }
 
     public Integer getLotteryvalue() {
-        lotteryvalue = getLotterynumber() * 2;
+        lotteryvalue = getLotterynumber() * 2 * appnumbers * issuenumbers;
         return lotteryvalue;
+    }
+
+    /**
+     * 操作倍数
+     * @return
+     */
+    public boolean addAppnumbers(boolean isAdd) {
+        if (isAdd) {
+            appnumbers++;
+            if (appnumbers > 99) {
+                appnumbers--;
+                return false;
+            }
+            if (getLotteryvalue() > GlobalParams.MONEY) {
+                appnumbers--;
+                return false;
+            }
+        } else {
+            appnumbers--;
+            if(appnumbers == 0){
+                appnumbers++;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 操作追期
+     * @return
+     */
+    public boolean addIssuenumbers(boolean isAdd) {
+        if (isAdd) {
+            issuenumbers++;
+            if (issuenumbers > 99) {
+                issuenumbers--;
+                return false;
+            }
+            if (getLotteryvalue() > GlobalParams.MONEY) {
+                issuenumbers--;
+                return false;
+            }
+        } else {
+            issuenumbers--;
+            if(issuenumbers == 0){
+                issuenumbers++;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void clear() {
+        instance = null;
+        instance = new ShoppingCart();
     }
 }

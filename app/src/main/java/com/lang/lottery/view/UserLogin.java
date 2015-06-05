@@ -99,6 +99,8 @@ public class UserLogin extends BaseUI{
                                     // 登录成功了
                                     GlobalParams.isLogin = true;
 
+                                    GlobalParams.USERNAME = params[0].getUsername();
+
                                     // 成功获取金额
                                     Message balance = engine.getBalance(params[0]);
                                     if(balance != null){

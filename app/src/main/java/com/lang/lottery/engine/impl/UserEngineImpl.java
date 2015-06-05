@@ -3,14 +3,18 @@ package com.lang.lottery.engine.impl;
 import android.util.Xml;
 
 import com.lang.lottery.ConstantValue;
+import com.lang.lottery.bean.ShoppingCart;
+import com.lang.lottery.bean.Ticket;
 import com.lang.lottery.bean.User;
 import com.lang.lottery.engine.BaseEngine;
 import com.lang.lottery.engine.UserEngine;
 import com.lang.lottery.net.HttpClientUtil;
 import com.lang.lottery.net.protocal.Message;
 import com.lang.lottery.net.protocal.element.BalanceElement;
+import com.lang.lottery.net.protocal.element.BetElement;
 import com.lang.lottery.net.protocal.element.UserLoginElement;
 import com.lang.lottery.util.DES;
+import com.lang.lottery.view.Shopping;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -239,6 +243,97 @@ public class UserEngineImpl extends BaseEngine implements UserEngine {
                             if ("investvalues".equals(name)) {
                                 if (resultElement != null) {
                                     resultElement.setInvestvalues(parser.nextText());
+                                }
+                            }
+
+                            break;
+                    }
+                    eventType = parser.next();
+                }
+
+                return result;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return null;
+    }
+
+    @Override
+    public Message bet(User user) {
+        BetElement element = new BetElement();
+        element.getLotteryid().setTagValue(ShoppingCart.getInstance().getLotteryid().toString());
+
+        // 彩票的业务里面
+        // 关于注数的就算
+        // 关于投注信息封装（用户投注号码）
+
+        // 010203040506|01^01020304050607|01
+
+        StringBuffer codeBuffer = new StringBuffer();
+        for(Ticket item : ShoppingCart.getInstance().getTickets()){
+            codeBuffer.append("^").append(item.getRedNum().replaceAll(" ", "")).append("|").append(item.getBlueNum().replaceAll(" ", ""));
+        }
+
+        element.getLotterycode().setTagValue(codeBuffer.substring(1));
+
+        element.getIssue().setTagValue(ShoppingCart.getInstance().getIssue());
+        element.getLotteryvalue().setTagValue((ShoppingCart.getInstance().getLotteryvalue() * 100) + "");
+
+        element.getLotterynumber().setTagValue(ShoppingCart.getInstance().getLotterynumber().toString());
+        element.getAppnumbers().setTagValue(ShoppingCart.getInstance().getAppnumbers().toString());
+        element.getIssuesnumbers().setTagValue(ShoppingCart.getInstance().getIssuenumbers().toString());
+
+        element.getIssueflag().setTagValue(ShoppingCart.getInstance().getIssuenumbers() > 1 ? "1" : "0");
+
+        Message message = new Message();
+        message.getHeader().getUsername().setTagValue(user.getUsername());
+
+        String xml = message.getXml(element);
+
+        Message result = super.getResult(xml);
+
+        if (result != null) {
+
+            // 第四步：请求结果的数据处理
+            // body部分的第二次解析，解析的是明文内容
+
+            XmlPullParser parser = Xml.newPullParser();
+            try {
+
+                DES des = new DES();
+                String body = "<body>" + des.authcode(result.getBody().getServiceBodyInsideDESInfo(), "ENCODE", ConstantValue.DES_PASSWORD) + "</body>";
+
+                parser.setInput(new StringReader(body));
+
+                int eventType = parser.getEventType();
+                String name;
+
+                BetElement resultElement = null;
+
+                while (eventType != XmlPullParser.END_DOCUMENT) {
+                    switch (eventType) {
+                        case XmlPullParser.START_TAG:
+                            name = parser.getName();
+                            if ("errorcode".equals(name)) {
+                                result.getBody().getOelement().setErrorcode(parser.nextText());
+                            }
+                            if ("errormsg".equals(name)) {
+                                result.getBody().getOelement().setErrormsg(parser.nextText());
+                            }
+
+                            // 正对于当前请求
+                            if ("element".equals(name)) {
+                                resultElement = new BetElement();
+                                result.getBody().getElements().add(resultElement);
+                            }
+
+                            if ("actvalue".equals(name)) {
+                                if (resultElement != null) {
+                                    resultElement.setActvalue(parser.nextText());
                                 }
                             }
 
